@@ -1,0 +1,6 @@
+.editorconfig
+.prettierrc.yaml
+src
+tsconfig.json
+.parcel-cache
+tsup.config.ts

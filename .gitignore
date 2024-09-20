@@ -1,0 +1,7 @@
+/.idea
+/lib
+/node_modules
+/.vscode
+pnpm-lock.yaml
+package-lock.json
+.parcel-cache

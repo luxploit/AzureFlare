@@ -15,11 +15,17 @@
 		"typescript",
 		"framework"
 	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/luxploit/azureflare.git"
+	},
 	"files": [
 		"lib"
 	],
 	"scripts": {
-		"build": "tsup"
+		"build": "tsup",
+		"prepublish": "tsup",
+		"publish": "npm version patch && npm publish --access public"
 	},
 	"dependencies": {
 		"express": "^4.21.0",
