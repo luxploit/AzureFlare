@@ -1,6 +1,6 @@
 {
 	"name": "@lxpt/azureflare",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "AzureFlare: The opinionated express.js web framework!",
 	"author": "Laura Ava Streisky <laura@luxploit.net>",
 	"main": "lib/index.js",
