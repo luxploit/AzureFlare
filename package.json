@@ -1,6 +1,6 @@
 {
 	"name": "@lxpt/azureflare",
-	"version": "0.1.9",
+	"version": "0.1.10",
 	"description": "AzureFlare: The opinionated express.js web framework!",
 	"author": "Laura Ava Streisky <laura@luxploit.net>",
 	"main": "lib/cjs.js",
@@ -23,6 +23,10 @@
 	"files": [
 		"lib"
 	],
+	"exports": {
+		"import": "./lib/index.js",
+		"require": "./lib/cjs.js"
+	},
 	"scripts": {
 		"build": "parcel build",
 		"prepublish": "parcel build"
