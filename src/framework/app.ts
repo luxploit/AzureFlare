@@ -86,6 +86,8 @@ export class FlareApp {
 			paths: this.app.swagger!,
 		}
 
+		console.log(JSON.stringify(swag, null, 2))
+
 		this.app.use('/swagger', serve, setup(swag))
 	}
 

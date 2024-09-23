@@ -72,7 +72,7 @@ export abstract class FlareController {
 					const resp = oasRouteSpec.responses[rtSpec]
 					for (const contents in resp.content) {
 						const model = (new resp.content[contents]() as FlareModel).schema()
-						resp.content[contents] = model
+						resp.content[contents] = { schema: model }
 					}
 				}
 
