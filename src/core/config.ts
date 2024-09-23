@@ -1,4 +1,4 @@
-const configKey = Symbol('config')
+const configKey = Symbol('azureflare:core:config')
 
 export const Config = (): MethodDecorator => {
 	return (target, propertyKey, _) => {

@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-const attributeKey = Symbol('attribute')
+const attributeKey = Symbol('azureflare:core:attribute')
 
 export type FlareAttributes = Record<string, any | null>
 

@@ -1,8 +1,8 @@
 import { FlareNext, FlareRequest, FlareResponse } from '../extension/types'
 import 'reflect-metadata'
 
-const providerKey = Symbol('provider')
-const anonymousKey = Symbol('anonymous')
+const providerKey = Symbol('azureflare:auth:provider')
+const anonymousKey = Symbol('azureflare:auth:anonymous')
 
 export abstract class FlareAuthorizationProvider {
 	abstract authorize(request: FlareRequest, response: FlareResponse, next: FlareNext): void
@@ -34,9 +34,9 @@ export const getAuthorization = (
 	propertyKey?: string | symbol
 ): FlareAuthorizationProvider | undefined => {
 	if (propertyKey) {
-		return Reflect.getMetadata(providerKey, target, propertyKey) || undefined
+		return Reflect.getMetadata(providerKey, target, propertyKey) ?? undefined
 	} else {
-		return Reflect.getMetadata(providerKey, target) || undefined
+		return Reflect.getMetadata(providerKey, target) ?? undefined
 	}
 }
 

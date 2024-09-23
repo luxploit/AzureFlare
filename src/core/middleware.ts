@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import 'reflect-metadata'
 
-const middlewareKey = Symbol('middleware')
+const middlewareKey = Symbol('azureflare:core:middleware')
 
 export const Middleware = (...middlewares: RequestHandler[]): MethodDecorator & ClassDecorator => {
 	return (target: any, propertyKey?: string | symbol) => {

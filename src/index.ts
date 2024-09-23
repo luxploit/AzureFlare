@@ -17,3 +17,8 @@ export * from './authorization/basic-auth'
 //export * from './authorization/policy'
 export * from './authorization/provider'
 export * from './authorization/token-auth'
+
+export * from './oas/property'
+export * from './oas/types'
+export * from './oas/model'
+export * from './oas/route'

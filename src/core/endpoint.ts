@@ -1,8 +1,8 @@
 import 'reflect-metadata'
 
-const endpointKey = Symbol('endpoint')
+const endpointKey = Symbol('azureflare:core:endpoint')
 
-type EndpointVerb = 'get' | 'post' | 'put' | 'delete' | 'patch'
+export type EndpointVerb = 'get' | 'post' | 'put' | 'delete' | 'patch'
 
 interface EndpointMetadata {
 	url: string
@@ -11,9 +11,8 @@ interface EndpointMetadata {
 }
 
 const defineEndpointDecorator = (url: string, verb: EndpointVerb): MethodDecorator => {
-	return (target, propertyKey, _) => {
+	return (target, propertyKey, descriptor) => {
 		let metadata: EndpointMetadata = { url, verb, methodName: String(propertyKey) }
-
 		Reflect.defineMetadata(endpointKey, metadata, target, propertyKey)
 	}
 }

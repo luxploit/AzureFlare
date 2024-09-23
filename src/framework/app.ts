@@ -1,9 +1,11 @@
-import express, { RequestHandler, Router } from 'express'
+import express, { RequestHandler } from 'express'
 import { FlareController } from '../core/controller'
 import { FlareAuthorizationProvider } from '../authorization/provider'
 import { FlareSettings } from '../framework/settings'
 import { registerExpressExtensions } from '../extension/handler'
-import { FlareExpressApp } from '../extension/types'
+import { FlareExpressApp, FlareExpressRouter } from '../extension/types'
+import { FlareSwaggerOasOptions, FlareSwaggerOasConfig } from '../oas/swagger'
+import { serve, setup } from 'swagger-ui-express'
 
 export type FlareEngine = (
 	path: string,
@@ -47,13 +49,15 @@ export class FlareApp {
 		return this
 	}
 
-	useRouter(path: string, router: (app: FlareExpressApp) => Router): this {
+	useRouter(path: string, router: (app: FlareExpressApp, url: string) => FlareExpressRouter): this {
 		//console.log('registering httpRouter', path)
-		this.app.use(path, router(this.app))
+		this.app.use(path, router(this.app, path))
 		return this
 	}
 
-	useRouters(routers: { path: string; router: (app: FlareExpressApp) => Router }[]): this {
+	useRouters(
+		routers: { path: string; router: (app: FlareExpressApp, url: string) => FlareExpressRouter }[]
+	): this {
 		routers.forEach((router) => this.useRouter(router.path, router.router))
 		return this
 	}
@@ -72,6 +76,17 @@ export class FlareApp {
 
 	useSettings(key: string): FlareSettings {
 		return new FlareSettings(this.app, key)
+	}
+
+	useSwagger(options: FlareSwaggerOasOptions) {
+		const swag: FlareSwaggerOasConfig = {
+			openapi: '3.0.3',
+			info: options.info,
+			servers: options.servers,
+			paths: this.app.swagger!,
+		}
+
+		this.app.use('/swagger', serve, setup(swag))
 	}
 
 	build(): FlareExpressApp {

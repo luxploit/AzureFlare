@@ -8,8 +8,12 @@ export class FlareRouter {
 	private readonly router: FlareExpressRouter
 	private middlewares: RequestHandler[] = []
 
-	constructor(private readonly app: FlareExpressApp) {
+	constructor(
+		private readonly app: FlareExpressApp,
+		private readonly routerUrl: string
+	) {
 		this.router = Router()
+		this.router.routerUrl = routerUrl
 	}
 
 	useAuthorization(auth: FlareAuthorizationProvider): this {
@@ -53,8 +57,9 @@ export class FlareRouter {
 }
 
 type FlareRouterInitializer = (app: FlareRouter) => void
-export const createFlareRouter = (initializer: FlareRouterInitializer) => (app: FlareExpressApp) => {
-	const router = new FlareRouter(app)
-	initializer(router)
-	return router.build()
-}
+export const createFlareRouter =
+	(initializer: FlareRouterInitializer) => (app: FlareExpressApp, url: string) => {
+		const router = new FlareRouter(app, url)
+		initializer(router)
+		return router.build()
+	}

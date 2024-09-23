@@ -1,10 +1,12 @@
-import { getRoutes } from '../core/endpoint'
+import { EndpointVerb, getRoutes } from './endpoint'
 import { FlareExpressApp, FlareExpressRouter, FlareRequest, FlareResponse } from '../extension/types'
-import { getMiddlewares } from '../core/middleware'
+import { getMiddlewares } from './middleware'
 import { getAuthorization, isAnonymous } from '../authorization/provider'
 import { getConfigs } from './config'
 import { FlareSettings } from '../framework/settings'
 import { getAttributes } from './attributes'
+import { getOasRoutes as getOasRoute } from '../oas/route'
+import { FlareModel } from '../oas/model'
 
 export abstract class FlareController {
 	setup = (app: FlareExpressApp, router?: FlareExpressRouter) => {
@@ -29,7 +31,6 @@ export abstract class FlareController {
 			const routerAttributes = router?.attributes ?? {}
 			const controllerAttributes = getAttributes(this)
 			const endpointAttributes = getAttributes(this, route.methodName)
-
 			const attributes = {
 				...globalAttributes,
 				...routerAttributes,
@@ -41,7 +42,10 @@ export abstract class FlareController {
 				middlewares.unshift(auth.authorize.bind(auth))
 			}
 
+			let oasUrl = ''
+
 			if (router) {
+				oasUrl = router.routerUrl + route.url
 				router[route.verb](
 					route.url,
 					middlewares,
@@ -50,9 +54,8 @@ export abstract class FlareController {
 						;(this as any)[route.methodName](request, response)
 					}
 				)
-
-				//console.log('registering router route', route.verb, route.url, route.methodName)
 			} else {
+				oasUrl = route.url
 				app[route.verb](
 					route.url,
 					middlewares,
@@ -61,8 +64,19 @@ export abstract class FlareController {
 						;(this as any)[route.methodName](request, response)
 					}
 				)
+			}
 
-				//console.log('registering global route', route.verb, route.url, route.methodName)
+			const oasRouteSpec = getOasRoute(this, route.methodName)
+			if (oasRouteSpec) {
+				for (const rtSpec in oasRouteSpec.responses) {
+					const resp = oasRouteSpec.responses[rtSpec]
+					for (const contents in resp.content) {
+						const model = (new resp.content[contents]() as FlareModel).schema()
+						resp.content[contents] = model
+					}
+				}
+
+				app.swagger! = { [oasUrl]: { [route.verb]: oasRouteSpec } }
 			}
 		})
 	}

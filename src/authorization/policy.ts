@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-const policyKey = Symbol('policy')
+const policyKey = Symbol('azureflare:auth:policy')
 
 /*
 	Policies are not yet supported!

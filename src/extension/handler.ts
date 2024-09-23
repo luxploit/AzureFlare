@@ -21,4 +21,10 @@ const registerResponseExtensions = (res: FlareResponse) => {
 		res.render(template, data)
 		return res
 	}
+
+	res.error = (code: number, message?: string | Object) => {
+		res.status(code)
+		typeof message === 'object' ? res.json(message) : res.send(message)
+		return res
+	}
 }
