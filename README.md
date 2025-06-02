@@ -1,4 +1,4 @@
-# AzureFlare
+# [@lxpt](https://luxploit.net)/[azureflare](https://npm.im/@lxpt/azureflare)
 
 A highly opinionated Web Framework built on top of Express.js
 
